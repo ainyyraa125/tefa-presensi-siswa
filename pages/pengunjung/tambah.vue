@@ -28,7 +28,7 @@
               v-model="form.hari"
               class="form-control form-control-lg form-select radius"
             >
-              <option value="">hari</option>
+              <option value="">Hari</option>
               <option v-for="(obje, i) in objec" :key="i" :value="obje.id">
                 {{ obje.hari }}
               </option>
@@ -43,9 +43,17 @@
               <option v-for="(item, i) in objectives" :key="i" :value="item.id">
                 {{ item.keterangan }}
               </option>
-              <!-- <option value="Baca Buku">Baca Buku</option>
-              <option value="Pinjam Buku">Pinjam Buku</option>
-              <option value="StaKembalikan Bukuf">Kembalikan Buku</option> -->
+            </select>
+          </div>
+          <div class="mb-3">
+            <select
+              v-model="form.opsi"
+              class="form-control form-control-lg form-select radius"
+            >
+              <option value="">Opsi</option>
+              <option v-for="(op, i) in ops" :key="i" :value="op.id">
+                {{ op.opsi }}
+              </option>
             </select>
           </div>
           <div class="tombol">
@@ -56,9 +64,9 @@
             >
               KIRIM
             </button>
-            <nuxt-link to="/pengunjung">
+            <nuxt-link to="/">
             <button type="submit"
-                class="btn btn-lg btn-secondary radius kembali">
+                class="btn btn-lg btn-secondary radius " style="float: right;">
                 KEMBALI
               </button>
             </nuxt-link>
@@ -91,14 +99,25 @@
 }
 </style>
 <script setup>
+useHead({
+  title: "PRESENSI",
+  meta: [
+    {
+      name: "description",
+      content: "Halaman ISI DATA",
+    },
+  ],
+});
 const supabase = useSupabaseClient();
 const members = ref([]);
 const objectives = ref([]);
 const objec = ref([]);
+const ops = ref([]);
 const form = ref({
   siswa: "",
   hari: "",
   keterangan: "",
+  opsi: "",
 });
  const kirimData = async () => {
   // console.log(form.value)
@@ -117,12 +136,16 @@ const gethari = async () => {
  const { data, error } = await supabase.from("statushari").select("*");
  if (data) objec.value = data;
 };
+const getOpsi = async () => {
+ const { data, error } = await supabase.from("Opsi").select("*");
+ if (data) ops.value = data;
+};
 
 onMounted(() => {
   getNama();
   gethari();
   getKehadiran();
+  getOpsi();
 
 });
 </script>
-
